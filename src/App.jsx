@@ -1,23 +1,38 @@
+import { useState } from "react";
+
 import Header from "./components/Header";
+import NoteForm from "./components/NoteForm";
 import Note from "./components/Note";
 import Footer from "./components/Footer";
 
-import notes from "./notes";
+const App = () => {
+  const [notes, setNotes] = useState([]);
 
-function App() {
+  const addNote = newNote => {
+    if (newNote.content === "") return;
+    setNotes(prevNotes => [...prevNotes, newNote]);
+  }
+
+  const deleteNote = id => {
+    setNotes(prevNotes => prevNotes.filter((note, index) => index !== id));
+  };
+
   return (
     <>
       <Header />
-      {notes.map(note => (
+      <NoteForm onSubmit={addNote} />
+      {notes.map((note, index) => (
         <Note
-          key={note.key}
+          key={index}
+          id={index}
           title={note.title}
           content={note.content}
+          onDelete={deleteNote}
         />
       ))}
       <Footer />
     </>
   );
-}
+};
 
 export default App;
